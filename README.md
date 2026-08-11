@@ -3,14 +3,14 @@
 A standalone Python Bluetooth LE client for the Trividia Health TRUE
 METRIX AIR blood glucose meter. It reads device identity and stored
 glucose readings directly from the meter over BLE and keeps everything
-local -- there's no dependency on any manufacturer cloud service or
+local: there's no dependency on any manufacturer cloud service or
 companion app.
 
 > [!WARNING]
 > **Work in progress.** The GATT protocol itself (service/characteristic
 > UUIDs, record byte format, the "streams everything on subscribe, no
 > command needed" behavior) was confirmed against a real, owned TRUE
-> METRIX AIR via a live capture -- see [Protocol notes](#protocol-notes).
+> METRIX AIR via a live capture (see [Protocol notes](#protocol-notes)).
 > This package's own `bleak`-based implementation of that protocol
 > hasn't been run against real hardware yet. Treat it as
 > protocol-correct-on-paper until that's happened. This notice will be
@@ -22,7 +22,7 @@ This is an unofficial, independently developed client, built directly
 against the public Bluetooth SIG Glucose Profile specification. The
 author and contributors are not affiliated with Trividia Health.
 **This is a personal-use tool for reading data from your own meter, not
-a medical product.** Don't use it to make treatment decisions -- read
+a medical product.** Don't use it to make treatment decisions. Read
 your meter's own display for that.
 
 ## Features
@@ -36,7 +36,7 @@ your meter's own display for that.
   aren't real patient data), with an opt-in flag to include them.
 - Ships a `trividia-truemetrix-ble` CLI for one-off use without writing
   any code.
-- Nothing here uploads anywhere -- reads stay local unless you choose to
+- Nothing here uploads anywhere. Reads stay local unless you choose to
   write them out yourself (e.g. via `--csv`).
 
 ## Requirements
@@ -46,7 +46,7 @@ your meter's own display for that.
 - On Linux, non-root BLE scanning/connection access typically needs the
   running user to be in the `bluetooth` group (or an equivalent polkit
   rule), depending on distro. No pairing/bonding was needed against the
-  real meter during protocol verification -- see Protocol notes.
+  real meter during protocol verification (see Protocol notes).
 
 ## Installation
 
@@ -99,8 +99,10 @@ Run `trividia-truemetrix-ble --help` for all options.
 ## Protocol notes
 
 TRUE METRIX AIR speaks the standard **Bluetooth SIG Glucose Profile**
-(Glucose Service `0x1808`) -- not a manufacturer-proprietary protocol.
-Confirmed by a live GATT capture against a real, owned meter:
+(Glucose Service `0x1808`), not a manufacturer-proprietary protocol.
+Confirmed by a live GATT capture against a real, owned meter. See
+[`docs/TRUEMETRIX_AIR_BLE_NOTES.md`](docs/TRUEMETRIX_AIR_BLE_NOTES.md)
+for the full capture writeup; summary below:
 
 - **Glucose Measurement** (`0x2A18`, notify): the actual readings, in
   the standard IEEE 11073-10101 record format (flags byte, sequence
@@ -110,36 +112,36 @@ Confirmed by a live GATT capture against a real, owned meter:
   decoded.
 - **Glucose Measurement Context** (`0x2A34`, notify): paired with each
   measurement by sequence number. Every context record observed had
-  Tester/Health as "value not available" -- this meter doesn't populate
+  Tester/Health as "value not available": this meter doesn't populate
   it, so this package only tracks its sequence number for correlation,
   not its content.
 - **Record Access Control Point** (`0x2A52`, indicate/write): present,
   but **never needed**. The meter streams its entire stored history
   unprompted the moment notifications are enabled on Glucose
-  Measurement -- no "report stored records" command required, which
+  Measurement, with no "report stored records" command required, which
   deviates from the strict spec's expected flow. Since no explicit
   "stream finished" signal was observed either, this package concludes
   the read is done after a configurable silence timeout
   (`--timeout`/`silence_timeout`, default 3 seconds) passes with no new
-  notification -- a heuristic, not a hard protocol guarantee.
+  notification: a heuristic, not a hard protocol guarantee.
 - **Glucose Feature** (`0x2A51`, read): present, not yet read/used by
   this package.
 - Two additional vendor-specific GATT services are also present on the
-  device but aren't part of the standard profile and aren't used here --
-  everything needed for reading glucose values comes from the standard
+  device but aren't part of the standard profile and aren't used here.
+  Everything needed for reading glucose values comes from the standard
   characteristics above.
 
 ### Known quirks / limitations
 
 - SFLOAT reserved bit patterns (NaN, +/-INFINITY, NRes) aren't specially
-  handled in `decode_sfloat` -- never observed from real hardware, where
-  the concentration field is always a normal value.
+  handled in `decode_sfloat`. They've never been observed from real
+  hardware, where the concentration field is always a normal value.
 - The mol/L concentration unit (the spec's alternate to kg/L) is
   converted using glucose's molar mass, but this was never observed set
-  by the meter (it always uses kg/L) -- included for spec completeness,
+  by the meter (it always uses kg/L). Included for spec completeness,
   not verified against real data.
 - End-of-stream detection is a silence timeout, not a real completion
-  signal -- see the Record Access Control Point note above.
+  signal (see the Record Access Control Point note above).
 
 ### Not yet implemented
 
@@ -147,8 +149,8 @@ Confirmed by a live GATT capture against a real, owned meter:
   supported/needed) isn't modeled.
 - The two vendor-specific GATT services aren't investigated.
 - Ketone measurements (some TRUE METRIX variants support ketone
-  testing) aren't modeled -- unknown whether they'd surface through this
-  same standard profile.
+  testing) aren't modeled, and it's unknown whether they'd surface
+  through this same standard profile.
 
 ## Contributing
 
