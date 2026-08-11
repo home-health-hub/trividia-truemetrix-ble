@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trividia-truemetrix-ble"
+version = "0.1.0"
+description = "Standalone Python Bluetooth LE client for the Trividia Health TRUE METRIX AIR blood glucose meter"
+readme = "README.md"
+license = "GPL-3.0-only"
+requires-python = ">=3.11"
+dependencies = [
+    "bleak>=0.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/bonelifer/trividia-truemetrix-ble"
+
+[project.scripts]
+trividia-truemetrix-ble = "trividia_truemetrix_ble.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "flake8>=7.0.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/trividia_truemetrix_ble"]
