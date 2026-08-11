@@ -100,7 +100,9 @@ Run `trividia-truemetrix-ble --help` for all options.
 
 TRUE METRIX AIR speaks the standard **Bluetooth SIG Glucose Profile**
 (Glucose Service `0x1808`) -- not a manufacturer-proprietary protocol.
-Confirmed by a live GATT capture against a real, owned meter:
+Confirmed by a live GATT capture against a real, owned meter. See
+[`docs/TRUEMETRIX_AIR_BLE_NOTES.md`](docs/TRUEMETRIX_AIR_BLE_NOTES.md)
+for the full capture writeup; summary below:
 
 - **Glucose Measurement** (`0x2A18`, notify): the actual readings, in
   the standard IEEE 11073-10101 record format (flags byte, sequence
