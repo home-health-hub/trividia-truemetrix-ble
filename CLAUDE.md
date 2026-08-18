@@ -3,7 +3,7 @@
 ## Related repos to watch
 
 - **trividia-truemetrix-hid**:
-  https://github.com/bonelifer/trividia-truemetrix-hid. The sibling
+  https://github.com/home-health-hub/trividia-truemetrix-hid. The sibling
   library for the same meter family, over USB HID instead of BLE. Not a
   code dependency, but the architecture/API shape here (Reading/
   DeviceInfo dataclasses, pure protocol.py decoding functions, thin
@@ -13,7 +13,7 @@
   METRIX AIR specifically, it's worth checking.
 
 - **trividia-truemetrix-daemon**:
-  https://github.com/bonelifer/trividia-truemetrix-daemon. The daemon
+  https://github.com/home-health-hub/trividia-truemetrix-daemon. The daemon
   that currently consumes trividia-truemetrix-hid for sync/reporting.
   Once this package is verified against real hardware, it's the likely
   second consumer (BLE path alongside the existing USB HID path).
