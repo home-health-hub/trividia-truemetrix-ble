@@ -1,5 +1,9 @@
 # trividia-truemetrix-ble
 
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white) ![Bluetooth LE](https://img.shields.io/badge/Bluetooth-LE-0082FC?logo=bluetooth&logoColor=white)
+
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](https://github.com/home-health-hub/trividia-truemetrix-ble/blob/main/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/home-health-hub/trividia-truemetrix-ble#contributing) [![Discussions](https://img.shields.io/badge/discussions-welcome-blue)](https://github.com/home-health-hub/trividia-truemetrix-ble/discussions)
+
 A standalone Python Bluetooth LE client for the Trividia Health TRUE
 METRIX AIR blood glucose meter. It reads device identity and stored
 glucose readings directly from the meter over BLE and keeps everything
